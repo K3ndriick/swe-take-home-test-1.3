@@ -72,16 +72,22 @@ Note that this task is **completely optional** and we do not expect you to finis
 Please answer these briefly:
 
 1. **Authentication:** If we need to add authentication to this system, how would you approach it?
+I would use session-based cookies to implement authentication into the system. We can use a email + password, followed by 2FA authentication via a x-digit code or magic link sent to the user's email. This provides the admins the ability to delete user sessions as they are stored server-side, giving us more control over logins/logouts in the system. However the tradeoff would be that this method would require server-side storage. We can also add a middleware to help protect more sensitive routes, and check if users are authenticated before allowing access to said protected routes.
 
 2. **Improvements:** What other improvements would you implement if this were going to production or if you have more time?
+I would implement a soft delete functionality in the system as this would make the system more resilient against accidental deletes. Input sanitisation can also be achieved before sending data downstream/upstream to the DB or to the frontend by having different interface types, 1 for the DB side and 1 for the frontend side. A PostgreSQL DB can be created to store data, as it allows us to set RLS policies for data access control, and also adheres to Principle of Least Privilege (PoLP) - only giving users the minimum level of permissions necessary to perform their intended functions. In addition, some ideas to assist database when record sizes grow would be indexing to optimise query performance, along with adding pagination.
 
 3. **Tech Stack Experience:** Do you have experience with PHP, Vue.js, or mobile app development (React Native/Flutter)?
+Yes, I have experience with CakePHP from my university capstone (Final Year Project Part 1), where I built an e-commerce platform. For mobile development, I built an iOS app using Swift for another capstone project, and I'm currently learning React Native by rebuilding that iOS project - though progress has been slow as I've been focusing on another personal project using the Claude API. I've also built multiple projects using a React/Next.js/Supabase stack, including a custom CMS platform (Final Year Project Part 2) and a rebuilt version of my CakePHP e-commerce system in Next.js. I haven't worked with Vue.js directly, but I'm comfortable picking up new frontend frameworks given my experience across React and Next.js. I've also used React during a previous internship, working on a multi-tool SaaS platform for tradespeople.
 
 4. **AI / Tools:** What tools/assistants did you use while working on this assignment (e.g., GitHub Copilot, ChatGPT, etc.)? We appreciate AI usage, we're interested in _how_ you use these tools.
+Claude Code was used throughout the duration of this assignment. It was used for pair programming & guided problem-solving. Instead of just copy pasting solutions from Claude, I used it as an assistant to help me understand the contents of the codebase, where to find files to assist in solving the tasks, and identify relevant files. An example of when I used it was fixing the hasIssue and FAILED bug, where it helped me trace through all the interfaces to find the given enums of OK and FAIL. I also used it to evaluate my solutions to assess if I could be missing any edge cases or proposing more optimised solutions.
 
 5. **Visa Status:** What visa are you currently on?
+Currently on 485 Visa with full working rights, expiry in early 2028
 
 6. **Languages:** What language(s) do you speak and what's your proficiency level?
+English (Native Speaker), Malay (Fluent), Mandarin (Conversational), Cantonese (Beginner)
 
 > **Tip:** You can write your answers directly in this README.md file below each question.
 
