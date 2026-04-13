@@ -312,6 +312,22 @@ button[type="submit"]:disabled {
   font-weight: 600;
 }
 
+.delete-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #c0392b;
+}
+
 .check-note {
   background: #f8f9fa;
   padding: 1rem;
@@ -401,4 +417,67 @@ button[type="submit"]:disabled {
 
 .toast-close:hover {
   color: #7f8c8d;
+}
+
+/* Confirm Dialog */
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.confirm-dialog {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.confirm-dialog p {
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.confirm-cancel {
+  padding: 0.5rem 1rem;
+  background: #ecf0f1;
+  color: #2c3e50;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.confirm-cancel:hover {
+  background: #ddd;
+}
+
+.confirm-delete {
+  padding: 0.5rem 1rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.confirm-delete:hover {
+  background: #c0392b;
 }

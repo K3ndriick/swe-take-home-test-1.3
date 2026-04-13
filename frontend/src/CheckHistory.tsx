@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import type { Vehicle, Check } from "./types";
+import type { ToastType } from "./Toast";
+import { ConfirmDialog } from "./ConfirmDialog";
 import { api } from "./api";
 
 type IssueFilter = "all" | "true" | "false";
 
 interface Props {
   refreshTrigger?: number;
+  showToast: (message: string, type: ToastType) => void;
+  onDelete: () => void;
 }
 
-export function CheckHistory({ refreshTrigger }: Props) {
+export function CheckHistory({ refreshTrigger, showToast, onDelete }: Props) {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [hasIssueFilter, setHasIssueFilter] = useState<IssueFilter>("all");
   const [checks, setChecks] = useState<Check[]>([]);
+  const [deleteCheckId, setDeleteCheckId] = useState<string | null>(null);
 
   // Track which params fetched
   const [lastFetchedParams, setLastFetchedParams] = useState<{
@@ -69,6 +74,25 @@ export function CheckHistory({ refreshTrigger }: Props) {
     if (!vehicleId) {
       setChecks([]);
       setLastFetchedParams(null);
+    }
+  };
+
+  const handleDeleteClick = (checkId: string) => {
+    setDeleteCheckId(checkId);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteCheckId) return;
+
+    try {
+      await api.deleteCheck(deleteCheckId);
+      setChecks((prev) => prev.filter((c) => c.id !== deleteCheckId));
+      showToast("Inspection record deleted", "success");
+      onDelete();
+    } catch {
+      showToast("Failed to delete inspection record", "error");
+    } finally {
+      setDeleteCheckId(null);
     }
   };
 
@@ -162,9 +186,22 @@ export function CheckHistory({ refreshTrigger }: Props) {
                   </div>
                 )}
               </div>
+              <button
+                className="delete-btn"
+                onClick={() => handleDeleteClick(check.id)}
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>
+      )}
+      {deleteCheckId && (
+        <ConfirmDialog
+          message="Are you sure you want to delete? This is a permanent action that can't be undone."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteCheckId(null)}
+        />
       )}
     </div>
   );
