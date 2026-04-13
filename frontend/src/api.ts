@@ -29,6 +29,17 @@ export const api = {
     return response.json();
   },
 
+  async deleteCheck(checkId: string): Promise<void> {
+    const response = await fetch(`${API_BASE}/checks/${checkId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const error: ErrorResponse = await response.json();
+      throw error;
+    }
+  },
+
   async getChecks(vehicleId: string, hasIssue?: boolean): Promise<Check[]> {
     const params = new URLSearchParams({ vehicleId });
     if (hasIssue !== undefined) {
