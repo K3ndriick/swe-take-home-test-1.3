@@ -42,8 +42,7 @@ export interface CheckFilters {
  * @returns The newly created check with all computed fields
  */
 export const createCheck = (checkData: CreateCheckData): Check => {
-  // @ts-ignore
-  const hasIssue = checkData.items.some((item) => item.status === "FAILED");
+  const hasIssue = checkData.items.some((item) => item.status === "FAIL");
 
   const newCheck: Check = {
     id: uuidv4(),
@@ -51,7 +50,7 @@ export const createCheck = (checkData: CreateCheckData): Check => {
     odometerKm: checkData.odometerKm,
     items: checkData.items,
     ...(checkData.note !== undefined && { note: checkData.note }),
-    hasIssue: !hasIssue,
+    hasIssue: hasIssue,
     createdAt: new Date().toISOString(),
   };
 
@@ -133,5 +132,17 @@ export const getCheckById = (checkId: string): Check | undefined => {
  * }
  */
 export const deleteCheck = (checkId: string): boolean => {
-  return false;
+  const checks = readChecks();
+
+  // grab arr of checks without the check to delete
+  const updatedChecksArr = checks.filter((check) => check.id !== checkId);
+
+  // if length is still same means checkId is invalid - return false
+  if (updatedChecksArr.length === checks.length) {
+    return false;
+  }
+
+  // write updated checks arr
+  writeChecks(updatedChecksArr);
+  return true;
 };
