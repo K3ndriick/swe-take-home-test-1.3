@@ -132,5 +132,17 @@ export const getCheckById = (checkId: string): Check | undefined => {
  * }
  */
 export const deleteCheck = (checkId: string): boolean => {
-  return false;
+  const checks = readChecks();
+
+  // grab arr of checks without the check to delete
+  const updatedChecksArr = checks.filter((check) => check.id !== checkId);
+
+  // if length is still same means checkId is invalid - return false
+  if (updatedChecksArr.length === checks.length) {
+    return false;
+  }
+
+  // write updated checks arr
+  writeChecks(updatedChecksArr);
+  return true;
 };
