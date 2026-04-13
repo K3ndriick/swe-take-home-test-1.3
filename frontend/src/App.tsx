@@ -23,7 +23,7 @@ function App() {
       <main>
         <div className="container">
           <div className="left-panel">
-            <CheckForm onSuccess={handleCheckSubmitted} />
+            <CheckForm onSuccess={handleCheckSubmitted} showToast={showToast}/>
           </div>
 
           <div className="right-panel">

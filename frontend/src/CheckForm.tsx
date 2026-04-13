@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import type { Vehicle, CheckItem, CheckItemKey, ErrorResponse, CheckItemStatus } from "./types";
 import { api } from "./api";
+import type { ToastType } from "./Toast";
 
 const CHECK_ITEMS: CheckItemKey[] = ["TYRES", "BRAKES", "LIGHTS", "OIL", "COOLANT"];
 
 interface Props {
   onSuccess: () => void;
+  showToast: (message: string, type: ToastType) => void;
 }
 
-export function CheckForm({ onSuccess }: Props) {
+export function CheckForm({ onSuccess, showToast }: Props) {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [odometerKm, setOdometerKm] = useState("");
@@ -56,14 +58,17 @@ export function CheckForm({ onSuccess }: Props) {
       );
       setNote("");
       onSuccess();
+      showToast("Inspection submitted successfully", "success");
     } catch (err: unknown) {
       const errorResponse = err as ErrorResponse;
       if (errorResponse.error?.details) {
         setValidationErrors(
           errorResponse.error.details.map((d) => `${d.field}: ${d.reason}`),
         );
+        showToast(`${errorResponse.error.details.length} errors(s)`, "error");
       } else {
         setError("Failed to submit check. Please try again.");
+        showToast("Failed to submit inspection", "error");
       }
     } finally {
       setLoading(false);
