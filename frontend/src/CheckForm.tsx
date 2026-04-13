@@ -15,6 +15,7 @@ export function CheckForm({ onSuccess }: Props) {
   const [items, setItems] = useState<CheckItem[]>(
     CHECK_ITEMS.map((key) => ({ key, status: "OK" })),
   );
+  const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -44,14 +45,16 @@ export function CheckForm({ onSuccess }: Props) {
         vehicleId: selectedVehicle,
         odometerKm: parseFloat(odometerKm),
         items,
+        ...(note.trim() && { note: note.trim() }), // adds note to payload if notes is trimmed & non-empty
       });
 
       // Reset form and display success notification
       setSelectedVehicle("");
       setOdometerKm("");
       setItems(
-        CHECK_ITEMS.map((key) => ({ key, status: "OK" })), //  or FAIL based on status enum values
+        CHECK_ITEMS.map((key) => ({ key, status: "OK" })),
       );
+      setNote("");
       onSuccess();
     } catch (err: unknown) {
       const errorResponse = err as ErrorResponse;
@@ -142,6 +145,19 @@ export function CheckForm({ onSuccess }: Props) {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="note">Notes (optional)</label>
+        <textarea
+          id="note"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Add any notes about the inspection"
+          maxLength={300}
+          rows={3}
+        />
+        <small>{note.length}/300</small>
       </div>
 
       <button type="submit" disabled={loading}>
