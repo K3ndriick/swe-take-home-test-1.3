@@ -117,14 +117,28 @@ export function CheckForm({ onSuccess }: Props) {
           {items.map((item) => (
             <div key={item.key} className="checklist-item">
               <span className="item-label">{item.key}</span>
-              <select
-                value={String(item.status)}
-                onChange={(e) =>
-                  handleItemStatusChange(item.key, e.target.value as CheckItemStatus)
-                }>
-                <option value="true">OK</option>
-                <option value="false">FAIL</option>
-              </select>
+              <div className="radio-group">
+                <label>
+                  <input
+                    type="radio"
+                    name={item.key}
+                    value="OK"
+                    checked={item.status === "OK"}
+                    onChange={() => handleItemStatusChange(item.key, "OK")}
+                  />
+                  OK
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={item.key}
+                    value="FAIL"
+                    checked={item.status === "FAIL"}
+                    onChange={() => handleItemStatusChange(item.key, "FAIL")}
+                  />
+                  FAIL
+                </label>
+              </div>
             </div>
           ))}
         </div>
