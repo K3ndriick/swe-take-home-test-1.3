@@ -10,6 +10,7 @@ import { Request, Response } from "express";
 import * as checkService from "../services/checkService";
 import { validateCheckRequest } from "../validation";
 import { ErrorResponse } from "../types";
+import { CreateCheckData } from "../services/checkService";
 
 /**
  * POST /checks
@@ -27,7 +28,31 @@ import { ErrorResponse } from "../types";
  * @returns JSON response with created check or validation errors
  */
 export const createCheck = (req: Request, res: Response): void => {
-  res.status(501).json({ error: { message: "Not implemented" } });
+  const checkErrors = validateCheckRequest(req.body);
+
+  if (checkErrors.length > 0) {
+    const errorResponse: ErrorResponse = {
+      error: {
+        code: "VALIDATION_ERROR",
+        message: `Invalid request - Validation failed`,
+        details: checkErrors
+      }
+    };
+    res.status(400).json(errorResponse);
+    return;
+  }
+
+  // create req data obj first for boundary type safety
+  const checkData: CreateCheckData = {
+    vehicleId: req.body.vehicleId,
+    odometerKm: req.body.odometerKm,
+    items: req.body.items,
+    note: req.body.note,
+  }
+  
+  const checkReq = checkService.createCheck(checkData);
+
+  res.status(201).json(checkReq);
 };
 
 /**
